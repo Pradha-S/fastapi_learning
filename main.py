@@ -24,13 +24,13 @@ def greet():
     return {"msg": "WELCOME!!!"}
 
 
-#used to run if we have to search by /home
+#1. To get or fetch the all items
 
 @app.get("/items")
 def items_all():
     return items
 
-#use of path parameter
+#2. get a specified product using path parameter
 @app.get("/items/{id}")
 def item_id(id:int):
     for i in items:
@@ -39,11 +39,19 @@ def item_id(id:int):
         
     return "Item not found"
 
-#using post to create data
+#3. to create new record or data using POST
 
 @app.post("/items")
 def add_item(Var:Items): #var parameter recieved from the user of Items(pydantic class) , items is the list
     items.append(Var)
     return items
 
+# to update the record use put
 
+@app.put("/items")
+def update_item(id:int,U_var:Items):
+    for i in range(len(items)):
+        if items[i].id==id:
+            items[i]=U_var
+            return "Updated sucessfully"
+    return "Item not found"
