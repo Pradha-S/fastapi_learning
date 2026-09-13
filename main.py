@@ -55,3 +55,13 @@ def update_item(id:int,U_var:Items):
             items[i]=U_var
             return "Updated sucessfully"
     return "Item not found"
+
+#to delte a record using delete
+
+@app.delete("/items/{id}")
+def delete_item(id:int):
+    for i in range(len(items)):
+        if items[i].id==id:
+            del items[i]
+            return "Deleted Sucessfully"
+    return "Error occured while deletion"
