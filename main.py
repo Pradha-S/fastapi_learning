@@ -31,8 +31,12 @@ def items_all():
     return items
 
 #use of path parameter
-@app.get("/items/{name}")
-def item_name(name):
-    return {"Item needed": f"{name}"}
+@app.get("/items/{id}")
+def item_id(id:int):
+    for i in items:
+        if i.id==id:
+            return items[id-1]
+        
+    return "Item not found"
 
 
