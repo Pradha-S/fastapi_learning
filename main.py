@@ -7,8 +7,11 @@ app=FastAPI()
 
 
 items=[
-    Items(1,"Rice", 240,4),
-    Items(3,"dal", 220,7)
+    Items(id=1,name="Rice", price=240,quantity=4),
+    Items(id=2,name="M_Dal", price=160,quantity=1),
+    Items(id=3,name="Channa", price=350,quantity=2),
+    Items(id=4,name="Almond", price=450,quantity=1),
+    Items(id=5,name="Soya", price=230,quantity=3)
 
 ]
 

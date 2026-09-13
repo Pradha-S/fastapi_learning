@@ -1,14 +1,12 @@
 
+#using pydantic model for data validation and initilization
+from pydantic import BaseModel
+#the class will inherit the basemodel
 
-class Items():
+class Items(BaseModel):
     id:int
     name:str
     price:float
     quantity:int
 
-    def __init__(self,id,name,price,quantity):
-        self.id=id
-        self.name=name
-        self.price= price
-        self.quantity=quantity
-
+    
