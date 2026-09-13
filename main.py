@@ -35,7 +35,7 @@ def items_all():
 def item_id(id:int):
     for i in items:
         if i.id==id:
-            return items[id-1]
+            return i
         
     return "Item not found"
 
