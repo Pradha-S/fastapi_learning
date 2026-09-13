@@ -39,4 +39,11 @@ def item_id(id:int):
         
     return "Item not found"
 
+#using post to create data
+
+@app.post("/items")
+def add_item(Var:Items): #var parameter recieved from the user of Items(pydantic class) , items is the list
+    items.append(Var)
+    return items
+
 
