@@ -50,12 +50,14 @@ def greet():
 def items_all(db:Session= Depends(get_db)):
     return db.query(Item).all()
 
+
 #2. get a specified product using path parameter
+
 @app.get("/items/{id}")
-def item_id(id:int):
-    for i in items:
-        if i.id==id:
-            return i
+def item_id(id:int, db:Session=Depends(get_db)):
+    db_item = db.get(Item, id) # get from which table (Item) and then what?? id
+    if(db_item):
+        return db_item
         
     return "Item not found"
 
@@ -69,24 +71,33 @@ def add_item(Var:Items, db:Session=Depends(get_db)): #var parameter recieved fro
     db.refresh(db_item)
     return db_item
 
-# to update the record use put
+#4. to update the record use put
 
 @app.put("/items")
-def update_item(id:int,U_var:Items):
-    for i in range(len(items)):
-        if items[i].id==id:
-            items[i]=U_var
-            return "Updated sucessfully"
-    return "Item not found"
+def update_item(id:int,U_var:Items, db:Session=Depends(get_db)):
+    db_item =db.get(Item, id)
 
-#to delte a record using delete
+    if(db_item):
+        db_item.name= U_var.name
+        db_item.price = U_var.price
+        db_item.quantity= U_var.quantity
+        db.commit()
+        return "Updated Successfully"
+
+    else:
+        return "Item not found"
+
+#5. to delte a record using delete
 
 @app.delete("/items/{id}")
-def delete_item(id:int):
-    for i in range(len(items)):
-        if items[i].id==id:
-            del items[i]
-            return "Deleted Sucessfully"
-    return "Error occured while deletion"
+def delete_item(id:int, db:Session=Depends(get_db)):
+    db_item =db.get(Item, id)
+    if(db_item):
+        db.delete(db_item)
+        db.commit()
+        return "Item Deleted Sucessfully"
+    else:
+
+        return "Error occured while deletion"
 
 
