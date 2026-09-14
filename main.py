@@ -2,8 +2,28 @@
 from fastapi import FastAPI
 from Items import Items
 
+from database import Session_local,base, connection
+from fastapi import Depends
+from sqlalchemy.orm import Session
+from models import Item
+
+
+
+base.metadata.create_all(bind=connection)
+
 #creating the fastapi application to start working with it
 app=FastAPI()
+
+#db code
+
+def get_db():
+    db=Session_local()
+    try:
+        yield db
+    finally:
+        db.close()
+
+
 
 
 items=[
@@ -27,8 +47,8 @@ def greet():
 #1. To get or fetch the all items
 
 @app.get("/items")
-def items_all():
-    return items
+def items_all(db:Session= Depends(get_db)):
+    return db.query(Item).all()
 
 #2. get a specified product using path parameter
 @app.get("/items/{id}")
@@ -42,9 +62,12 @@ def item_id(id:int):
 #3. to create new record or data using POST
 
 @app.post("/items")
-def add_item(Var:Items): #var parameter recieved from the user of Items(pydantic class) , items is the list
-    items.append(Var)
-    return items
+def add_item(Var:Items, db:Session=Depends(get_db)): #var parameter recieved from the user of Items(pydantic class) , items is the list
+    db_item= Item(**Var.model_dump())
+    db.add(db_item)
+    db.commit()
+    db.refresh(db_item)
+    return db_item
 
 # to update the record use put
 
@@ -65,3 +88,5 @@ def delete_item(id:int):
             del items[i]
             return "Deleted Sucessfully"
     return "Error occured while deletion"
+
+
